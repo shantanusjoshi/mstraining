@@ -1,0 +1,43 @@
+spring:
+   application:
+      name: order
+   stream:
+      bindings:
+         output:
+            destination: w-events
+            content-type: application/json
+         kafka:
+            binder:
+               zkNodes: localhost
+               brokers: localhost
+               
+   h2:
+     console:
+      path: /r2
+      settings:
+        web-allow-others: true
+        
+   datasource:
+    url: jdbc:h2:mem:orderDb;DB_CLOSE_ON_EXIT=FALSE;
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+   jpa:
+    show-sql: false
+
+server:
+  port: ${cart.server.port:8085}
+  
+eureka:
+  instance:
+    instanceId: ${spring.application.name}:${random.int}
+    leaseRenewalIntervalInSeconds: 5
+    leaseExpirationDurationInSeconds: 5
+    preferIpAddress: true
+    zone: ZoneA
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    prefer-same-zone-eureka: true
+    serviceUrl:
+        defaultZone: http://localhost:8761/eureka

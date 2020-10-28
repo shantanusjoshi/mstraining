@@ -1,0 +1,46 @@
+spring:
+  application:
+   name: productservice
+  h2:
+    console:
+      path: /h2
+      settings:
+        web-allow-others: true
+        
+  datasource:
+    url: jdbc:h2:mem:productDb;DB_CLOSE_ON_EXIT=FALSE
+    username: db
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    show-sql: false
+
+server:
+  port: ${project1.server.port:8084}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
+
+feign:
+  hystrix:
+    enabled: true
+
+eureka:
+  instance:
+    instanceId: ${spring.application.name}:${random.int}
+    leaseRenewalIntervalInSeconds: 5
+    leaseExpirationDurationInSeconds: 5
+    preferIpAddress: true
+    zone: ZoneA
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    prefer-same-zone-eureka: true
+    serviceUrl:
+        defaultZone: http://localhost:8761/eureka
